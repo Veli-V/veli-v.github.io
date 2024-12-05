@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Liiketoimintaplotteri!</title>
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css">
+		<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+table {
+	border: 2px solid black;
+}
+td {
+	padding: 20px;
+}
+</style>
+	</head>
+<body>
+<canvas id="myChart" style="width:100%;max-width:1800px;background:aquamarine"></canvas>
+nimi, arvo<br>
+<input type="text" id="name" value="Hans">
+<input type="text" id="hinta" value="5">
+<button onclick="store()">click</button>
+<br>
+<div id="list">
+	Liiketoiminnat:
+</div>
+<table id="poyta" border="1px" style="padding:15px">
+	<tr>
+		<th>Nimi</th>
+		<th>Arvo</th>
+	</tr>
+
+</table>
+<button onclick="simulate()">Simuloi</button>
+
+<script>
+const xValues = ["Joulu", "Tammi", "Helmi", "Maalis", "Huhti", "Touko", "Kesä", "Heinä", "Elo", "Syys", "Loka", "Marras", "Joulu", "Tammi", "Helmi", "Maalis", "Huhti", "Touko", "Kesä", "Heinä", "Elo", "Syys", "Loka", "Marras", "Joulu" ];
+
+const kakka = document.getElementById('myChart');
+
+console.log(kakka);
+
+
+kakka2 = new Chart("myChart", {
+  type: "line",
+  data: {
+    labels: xValues,
+    datasets: [
+	    //{
+      //fill: false,
+      //lineTension: 0,
+      //backgroundColor: "rgba(0,0,255,1.0)",
+      //borderColor: "rgba(0,0,255,0.1)",
+      //data: yValues
+    //}
+    ]
+  },
+  options: {
+  }
+});
+
+names = [["ilona", 2], ["janne", 1]]
+console.log("graph created: " + kakka2.data.datasets);
+
+function store(){
+	newName = document.getElementById("name").value
+	newValue = document.getElementById("hinta").value
+	names.push([newName, newValue]);
+	console.log(names);
+	document.getElementById("name").value = "";
+	document.getElementById("hinta").value = "";
+
+	//newElement = document.createElement("p");
+	//newElement.innerHTML = newName+": "+newValue
+	//document.getElementById("list").appendChild(newElement);
+
+	newtr = document.createElement("tr")
+	newtr.id = newName
+	newtd1 = document.createElement("td")
+	newtd2 = document.createElement("td")
+	newtd1.innerHTML = newName
+	newtd2.innerHTML = newValue
+
+	newtr.appendChild(newtd1)
+	newtr.appendChild(newtd2)
+
+	document.getElementById("poyta").appendChild(newtr)
+
+	console.log(newtr)
+
+	kakka2.data.datasets.push({
+		fill: false,
+		lineTension: 0,
+		//backgroundColor: "rgba(255,0,0,1.0)",
+		//borderColor: "rgba(255,0,0,0.1)",
+		label: newName,
+		data: [newValue]
+	});
+}
+
+function simulate(){
+	kakka2.data.datasets.forEach((dataset) => {
+		console.log(dataset);
+		rand = Math.random() * (1.1 - 0.9) + 0.9;
+		console.log(rand);
+		newvalue = (dataset.data[dataset.data.length - 1]*rand).toFixed(2);
+		newvalue = newvalue
+		dataset.data.push(newvalue);
+		newtd = document.createElement("td")
+		newtd.innerHTML = newvalue
+		if (rand < 0.98 ) {
+			newtd.style["background"] = "red";
+		}
+		else if (rand >= 0.98 && rand <= 1.02) {
+			newtd.style["background"] = "yellow";
+		}
+		else {
+			newtd.style["background"] = "green";
+		}
+		document.getElementById(dataset.label).appendChild(newtd)
+	})
+	kakka2.update()
+}
+
+</script>
+
+</body>
+</html>
+
+
+
